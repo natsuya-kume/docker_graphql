@@ -4,25 +4,24 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/natsuya-kume/docker_graphql/app/config"
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	graph "github.com/natsuya-kume/docker_graphql/app/graph/resolver"
 )
 
 func main() {
-	db, err := gorm.Open("mysql", dbsn())
+	db, err := config.InitDB()
 	if err != nil {
 		log.Fatalln(err)
 	} else {
-		fmt.Println("DB接続成功しました！")
+		fmt.Println("DB接続に成功しました！")
 	}
 
 	e := echo.New()
@@ -51,18 +50,6 @@ func main() {
 
 	e.HideBanner = true
 	e.Logger.Fatal(e.Start(":3000"))
-}
-
-func dbsn() string {
-	return fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
-	)
-
 }
 
 func welcome() echo.HandlerFunc {
