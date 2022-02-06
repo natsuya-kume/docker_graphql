@@ -13,6 +13,10 @@ run:
 start:
 	docker-compose exec app realize start --run
 
+.PHONY: generate
+generate:
+	docker-compose exec app go generate ./...
+
 # migrationファイルの作成
 .PHONY: migrate-create
 migrate-create:
