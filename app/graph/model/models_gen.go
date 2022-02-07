@@ -2,19 +2,48 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Node interface {
+	IsNode()
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type Pagination interface {
+	IsPagination()
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type Admin struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (Admin) IsNode() {}
+
+type AdminPagination struct {
+	PageInfo *PaginationInfo `json:"pageInfo"`
+	Nodes    []*Admin        `json:"nodes"`
+}
+
+func (AdminPagination) IsPagination() {}
+
+type CreateAdminInput struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type PaginationInfo struct {
+	Page             int  `json:"page"`
+	PaginationLength int  `json:"paginationLength"`
+	HasNextPage      bool `json:"hasNextPage"`
+	HasPreviousPage  bool `json:"hasPreviousPage"`
+	Count            int  `json:"count"`
+	TotalCount       int  `json:"totalCount"`
+}
+
+type UpdateAdminInput struct {
+	ID       string  `json:"id"`
+	Name     *string `json:"name"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
 }

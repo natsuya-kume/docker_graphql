@@ -1,0 +1,4 @@
+type Query {
+  admin(id: ID!): Admin # idによってadmin1つ取得
+  admins(limit: Int!, offset: Int): AdminPagination! #admin全て取得、ページネーション対応
+}

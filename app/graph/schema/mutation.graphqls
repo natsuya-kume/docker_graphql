@@ -1,0 +1,18 @@
+type Mutation {
+  createAdmin(input: CreateAdminInput!): Admin!
+  updateAdmin(input: UpdateAdminInput!): Admin!
+  deleteAdmin(id: ID!): Boolean!
+}
+
+input CreateAdminInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateAdminInput {
+  id: ID!
+  name: String
+  email: String
+  password: String
+}
