@@ -1,0 +1,17 @@
+interface Node {
+  id: ID!
+}
+
+interface Pagination {
+  pageInfo: PaginationInfo!
+  nodes: [Node!]!
+}
+
+type PaginationInfo {
+  page: Int!
+  paginationLength: Int!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  count: Int!
+  totalCount: Int!
+}
