@@ -1,0 +1,10 @@
+type ReviewTag implements Node {
+  id: ID!
+  name: String!
+  user: User!
+}
+
+type ReviewTagPagination implements Pagination {
+  pageInfo: PaginationInfo!
+  nodes: [ReviewTag!]!
+}

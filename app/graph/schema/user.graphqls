@@ -1,0 +1,12 @@
+type User implements Node {
+  id: ID!
+  name: String!
+  service: Service!
+  personalTags: PersonalTagPagination!
+  reviewTags: ReviewTagPagination!
+}
+
+type UserPagination implements Pagination {
+  pageInfo: PaginationInfo!
+  nodes: [User!]!
+}

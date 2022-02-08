@@ -1,4 +1,20 @@
 type Query {
   admin(id: ID!): Admin # idによってadmin1つ取得
   admins(limit: Int!, offset: Int): AdminPagination! #admin全て取得、ページネーション対応
+  service(id: ID!): Service # idによってservice1つ取得
+  services(limit: Int!, offset: Int): ServicePagination! #service全て取得、ページネーション対応
+  serviceAccount(id: ID!): ServiceAccount # idによってserviceAccount1つ取得
+  serviceAccounts(limit: Int!, offset: Int): ServiceAccountPagination! # serviceAccount全て取得、ページネーション対応
+  user(id: ID!): User # idによってuser1つ取得
+  users(
+    limit: Int!
+    offset: Int
+    name: String
+    email: String
+    password: String
+  ): UserPagination! # user全て取得、ページネーション対応
+  personalTag(id: ID!): PersonalTag # idによってpersonalTag1つ取得
+  personalTags(limit: Int!, offset: Int): PersonalTagPagination! #personalTag全て取得、ページネーション対応
+  reviewTag(id: ID!): ReviewTag # idによってreviewTag1つ取得
+  reviewTags(limit: Int!, offset: Int): ReviewTagPagination! #reviewTag全て取得、ページネーション対応
 }

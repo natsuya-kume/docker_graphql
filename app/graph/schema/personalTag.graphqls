@@ -1,0 +1,10 @@
+type PersonalTag implements Node {
+  id: ID!
+  name: String!
+  user: User!
+}
+
+type PersonalTagPagination implements Pagination {
+  pageInfo: PaginationInfo!
+  nodes: [PersonalTag!]!
+}
