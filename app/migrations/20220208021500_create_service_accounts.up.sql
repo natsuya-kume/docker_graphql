@@ -3,5 +3,6 @@ CREATE TABLE service_accounts (
   name       varchar(255) NOT NULL UNIQUE,
   email      varchar(255) NOT NULL UNIQUE,
   password   varchar(255) NOT NULL,
+  service_id INT NOT NULL,
   PRIMARY KEY (id)
 );
