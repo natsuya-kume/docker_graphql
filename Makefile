@@ -13,6 +13,10 @@ run:
 start:
 	docker-compose exec app realize start --run
 
+.PHONY: mysql
+mysql:
+	docker-compose exec db /bin/bash -c 'mysql -u root -proot'
+
 .PHONY: generate
 generate:
 	docker-compose exec app go generate ./...
