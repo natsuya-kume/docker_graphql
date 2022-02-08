@@ -32,6 +32,22 @@ type CreateAdminInput struct {
 	Password string `json:"password"`
 }
 
+type CreateServiceAccountInput struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type CreateServiceInput struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+type CreateUserInput struct {
+	Name string `json:"name"`
+}
+
 type PaginationInfo struct {
 	Page             int  `json:"page"`
 	PaginationLength int  `json:"paginationLength"`
@@ -41,9 +57,71 @@ type PaginationInfo struct {
 	TotalCount       int  `json:"totalCount"`
 }
 
+type PersonalTagPagination struct {
+	PageInfo *PaginationInfo `json:"pageInfo"`
+	Nodes    []*PersonalTag  `json:"nodes"`
+}
+
+func (PersonalTagPagination) IsPagination() {}
+
+type ReviewTagPagination struct {
+	PageInfo *PaginationInfo `json:"pageInfo"`
+	Nodes    []*ReviewTag    `json:"nodes"`
+}
+
+func (ReviewTagPagination) IsPagination() {}
+
+type ServiceAccountPagination struct {
+	PageInfo *PaginationInfo   `json:"pageInfo"`
+	Nodes    []*ServiceAccount `json:"nodes"`
+}
+
+func (ServiceAccountPagination) IsPagination() {}
+
+type ServicePagination struct {
+	PageInfo *PaginationInfo `json:"pageInfo"`
+	Nodes    []*Service      `json:"nodes"`
+}
+
+func (ServicePagination) IsPagination() {}
+
 type UpdateAdminInput struct {
 	ID       string  `json:"id"`
 	Name     *string `json:"name"`
 	Email    *string `json:"email"`
 	Password *string `json:"password"`
+}
+
+type UpdateServiceAccountInput struct {
+	ID       string  `json:"id"`
+	Name     *string `json:"name"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
+}
+
+type UpdateServiceInput struct {
+	ID       string  `json:"id"`
+	Name     *string `json:"name"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
+}
+
+type UpdateUserInput struct {
+	ID   string  `json:"id"`
+	Name *string `json:"name"`
+}
+
+type UserPagination struct {
+	PageInfo *PaginationInfo `json:"pageInfo"`
+	Nodes    []*User         `json:"nodes"`
+}
+
+func (UserPagination) IsPagination() {}
+
+type PostPersonalTagInput struct {
+	Name string `json:"name"`
+}
+
+type PostReviewTagInput struct {
+	Name string `json:"name"`
 }

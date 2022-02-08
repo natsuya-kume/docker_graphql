@@ -2,6 +2,17 @@ type Mutation {
   createAdmin(input: CreateAdminInput!): Admin!
   updateAdmin(input: UpdateAdminInput!): Admin!
   deleteAdmin(id: ID!): Boolean!
+  createService(input: CreateServiceInput!): Service!
+  updateService(input: UpdateServiceInput!): Service!
+  deleteService(id: ID!): Boolean!
+  createServiceAccount(input: CreateServiceAccountInput!): ServiceAccount!
+  updateServiceAccount(input: UpdateServiceAccountInput!): ServiceAccount!
+  deleteServiceAccount(id: ID!): Boolean!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  deleteUser(id: ID!): Boolean!
+  postPersonalTag(input: [postPersonalTagInput!]!): [PersonalTag!]!
+  postReviewTag(input: [postReviewTagInput!]!): [ReviewTag!]!
 }
 
 input CreateAdminInput {
@@ -15,4 +26,47 @@ input UpdateAdminInput {
   name: String
   email: String
   password: String
+}
+
+input CreateServiceInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateServiceInput {
+  id: ID!
+  name: String
+  email: String
+  password: String
+}
+
+input CreateServiceAccountInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input UpdateServiceAccountInput {
+  id: ID!
+  name: String
+  email: String
+  password: String
+}
+
+input CreateUserInput {
+  name: String!
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+}
+
+input postPersonalTagInput {
+  name: String!
+}
+
+input postReviewTagInput {
+  name: String!
 }
