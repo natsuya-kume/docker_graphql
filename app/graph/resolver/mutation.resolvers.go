@@ -5,13 +5,12 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 var personalTags []*model.PersonalTag = make([]*model.PersonalTag, 0)
@@ -33,23 +32,15 @@ func (r *mutationResolver) CreateAdmin(ctx context.Context, input model.CreateAd
 	}
 	// レコード作成
 	r.DB.Create(&admin)
-	adminID := []byte("Admin:" + adminIDStr) // プライマリキーを型名とセットで記述
 
-	// エンコードする
-	encAdminID := base64.StdEncoding.EncodeToString(adminID)
-	admin.ID = encAdminID
+	admin.ID = utils.Encode("Admin:", adminIDStr)
 	return &admin, nil
 }
 
 func (r *mutationResolver) UpdateAdmin(ctx context.Context, input model.UpdateAdminInput) (*model.Admin, error) {
 	var admin model.Admin
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(input.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	decID := utils.Decode(input.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -67,12 +58,7 @@ func (r *mutationResolver) UpdateAdmin(ctx context.Context, input model.UpdateAd
 func (r *mutationResolver) DeleteAdmin(ctx context.Context, id string) (bool, error) {
 	var admin model.Admin
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -95,22 +81,15 @@ func (r *mutationResolver) CreateService(ctx context.Context, input model.Create
 		Email:    input.Email,
 	}
 	r.DB.Create(&service)
-	serviceID := []byte("Service:" + serviceIDStr) // プライマリキーを型名とセットで記述
 
-	// エンコードする
-	encServiceID := base64.StdEncoding.EncodeToString(serviceID)
-	service.ID = encServiceID
+	service.ID = utils.Encode("Service:", serviceIDStr)
 	return &service, nil
 }
 
 func (r *mutationResolver) UpdateService(ctx context.Context, input model.UpdateServiceInput) (*model.Service, error) {
 	var service model.Service
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(input.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(input.ID)
 
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
@@ -130,11 +109,7 @@ func (r *mutationResolver) UpdateService(ctx context.Context, input model.Update
 func (r *mutationResolver) DeleteService(ctx context.Context, id string) (bool, error) {
 	var service model.Service
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(id)
 
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
@@ -160,24 +135,15 @@ func (r *mutationResolver) CreateServiceAccount(ctx context.Context, input model
 		ServiceID: "1", //楽天を想定しているためとりあえず1で固定
 	}
 	r.DB.Create(&serviceAccount)
-	serviceAccountID := []byte("ServiceAccount:" + serviceAccountIDStr) // プライマリキーを型名とセットで記述
 
-	// エンコードする
-	encServiceAccountID := base64.StdEncoding.EncodeToString(serviceAccountID)
-	serviceAccount.ID = encServiceAccountID
-
+	serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccountIDStr)
 	return &serviceAccount, nil
 }
 
 func (r *mutationResolver) UpdateServiceAccount(ctx context.Context, input model.UpdateServiceAccountInput) (*model.ServiceAccount, error) {
 	var serviceAccount model.ServiceAccount
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(input.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	decID := utils.Decode(input.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -196,12 +162,7 @@ func (r *mutationResolver) UpdateServiceAccount(ctx context.Context, input model
 func (r *mutationResolver) DeleteServiceAccount(ctx context.Context, id string) (bool, error) {
 	var serviceAccount model.ServiceAccount
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -224,23 +185,15 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUse
 		ServiceID: "1", //楽天を想定しているためとりあえず1で固定
 	}
 	r.DB.Create(&user)
-	userID := []byte("User:" + userIDStr) // プライマリキーを型名とセットで記述
 
-	// エンコードする
-	encUserID := base64.StdEncoding.EncodeToString(userID)
-	user.ID = encUserID
+	user.ID = utils.Encode("User:", userIDStr)
 	return &user, nil
 }
 
 func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUserInput) (*model.User, error) {
 	var user model.User
 
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(input.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	decID := utils.Decode(input.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -254,15 +207,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UpdateUse
 }
 
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (bool, error) {
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+	var user model.User
 
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
-	var user model.User
 
 	r.DB.Where("id = ?", searchID).Delete(&user)
 	return true, nil
@@ -286,10 +235,7 @@ func (r *mutationResolver) PostPersonalTag(ctx context.Context, input []*model.P
 		personalTags = append(personalTags, &personalTag)
 		r.DB.Create(&personalTag)
 		personalTagStr := strconv.Itoa(len(personalTags))
-		personalTagID := []byte("PersonalTag:" + personalTagStr)
-		// エンコードする
-		encPersonalTagID := base64.StdEncoding.EncodeToString(personalTagID)
-		personalTag.ID = encPersonalTagID
+		personalTag.ID = utils.Encode("PersonalTag:", personalTagStr)
 	}
 	return personalTags, nil
 }
@@ -311,10 +257,7 @@ func (r *mutationResolver) PostReviewTag(ctx context.Context, input []*model.Pos
 		reviewTags = append(reviewTags, &reviewTag)
 		r.DB.Create(&reviewTag)
 		reviewTagStr := strconv.Itoa(len(reviewTags))
-		reviewTagID := []byte("ReviewTag:" + reviewTagStr)
-		// エンコードする
-		encReviewTagID := base64.StdEncoding.EncodeToString(reviewTagID)
-		reviewTag.ID = encReviewTagID
+		reviewTag.ID = utils.Encode("ReviewTag:", reviewTagStr)
 	}
 	return reviewTags, nil
 }

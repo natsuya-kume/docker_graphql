@@ -5,22 +5,17 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
-	"log"
 	"strings"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 func (r *queryResolver) Admin(ctx context.Context, id string) (*model.Admin, error) {
 	var admin model.Admin
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
 
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&admin, searchID).Error; err != nil {
@@ -36,10 +31,7 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 		return nil, err
 	}
 	for _, admin := range admins {
-		adminID := []byte("Admin:" + admin.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encAdminID := base64.StdEncoding.EncodeToString(adminID)
-		admin.ID = encAdminID
+		admin.ID = utils.Encode("Admin:", admin.ID)
 	}
 	adminPagination := &model.AdminPagination{
 		Nodes: admins,
@@ -57,12 +49,8 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 
 func (r *queryResolver) Service(ctx context.Context, id string) (*model.Service, error) {
 	var service model.Service
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
 
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&service, searchID).Error; err != nil {
@@ -78,10 +66,7 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 		return nil, err
 	}
 	for _, service := range services {
-		serviceID := []byte("Service:" + service.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encServiceID := base64.StdEncoding.EncodeToString(serviceID)
-		service.ID = encServiceID
+		service.ID = utils.Encode("Service:", service.ID)
 	}
 	servicePagination := &model.ServicePagination{
 		Nodes: services,
@@ -99,11 +84,8 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 
 func (r *queryResolver) ServiceAccount(ctx context.Context, id string) (*model.ServiceAccount, error) {
 	var serviceAccount model.ServiceAccount
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&serviceAccount, searchID).Error; err != nil {
@@ -120,10 +102,7 @@ func (r *queryResolver) ServiceAccounts(ctx context.Context, limit int, offset *
 		return nil, err
 	}
 	for _, serviceAccount := range serviceAccounts {
-		serviceAccountID := []byte("ServiceAccount:" + serviceAccount.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encServiceAccountID := base64.StdEncoding.EncodeToString(serviceAccountID)
-		serviceAccount.ID = encServiceAccountID
+		serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccount.ID)
 	}
 	serviceAccountsPagination := &model.ServiceAccountPagination{
 		Nodes: serviceAccounts,
@@ -141,11 +120,8 @@ func (r *queryResolver) ServiceAccounts(ctx context.Context, limit int, offset *
 
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	var user model.User
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&user, searchID).Error; err != nil {
@@ -161,10 +137,7 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 		return nil, err
 	}
 	for _, user := range users {
-		userID := []byte("User:" + user.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encUserID := base64.StdEncoding.EncodeToString(userID)
-		user.ID = encUserID
+		user.ID = utils.Encode("User:", user.ID)
 	}
 	userPagination := &model.UserPagination{
 		Nodes: users,
@@ -182,11 +155,8 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 
 func (r *queryResolver) PersonalTag(ctx context.Context, id string) (*model.PersonalTag, error) {
 	var personalTag model.PersonalTag
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&personalTag, searchID).Error; err != nil {
@@ -203,10 +173,7 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 		return nil, err
 	}
 	for _, personalTag := range personalTags {
-		personalTagID := []byte("PersonalTag:" + personalTag.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encPersonalTagID := base64.StdEncoding.EncodeToString(personalTagID)
-		personalTag.ID = encPersonalTagID
+		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
 	}
 	personalTagPagination := &model.PersonalTagPagination{
 		Nodes: personalTags,
@@ -224,11 +191,8 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 
 func (r *queryResolver) ReviewTag(ctx context.Context, id string) (*model.ReviewTag, error) {
 	var reviewTag model.ReviewTag
-	// 入力されたidをデコードする
-	decID, err := base64.StdEncoding.DecodeString(id)
-	if err != nil {
-		log.Fatal(err)
-	}
+
+	decID := utils.Decode(id)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Find(&reviewTag, searchID).Error; err != nil {
@@ -244,10 +208,7 @@ func (r *queryResolver) ReviewTags(ctx context.Context, limit int, offset *int) 
 		return nil, err
 	}
 	for _, reviewTag := range reviewTags {
-		reviewTagID := []byte("ReviewTag:" + reviewTag.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encReviewTagID := base64.StdEncoding.EncodeToString(reviewTagID)
-		reviewTag.ID = encReviewTagID
+		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
 	}
 	reviewTagPagination := &model.ReviewTagPagination{
 		Nodes: reviewTags,

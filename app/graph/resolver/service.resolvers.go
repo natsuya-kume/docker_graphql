@@ -5,21 +5,17 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
-	"log"
 	"strings"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 func (r *serviceResolver) ServiceAccounts(ctx context.Context, obj *model.Service) (*model.ServiceAccountPagination, error) {
 	var serviceAccountPagination model.ServiceAccountPagination
 
-	decID, err := base64.StdEncoding.DecodeString(obj.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(obj.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	// あるサービス(楽天を想定)から作成されたサービスアカウントを取得する関数
@@ -27,10 +23,7 @@ func (r *serviceResolver) ServiceAccounts(ctx context.Context, obj *model.Servic
 		return nil, err
 	}
 	for _, serviceAccount := range serviceAccountPagination.Nodes {
-		serviceAccountID := []byte("ServiceAccount:" + serviceAccount.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encServiceAccountID := base64.StdEncoding.EncodeToString(serviceAccountID)
-		serviceAccount.ID = encServiceAccountID
+		serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccount.ID)
 	}
 	return &serviceAccountPagination, nil
 }
@@ -38,10 +31,7 @@ func (r *serviceResolver) ServiceAccounts(ctx context.Context, obj *model.Servic
 func (r *serviceResolver) Users(ctx context.Context, obj *model.Service) (*model.UserPagination, error) {
 	var userPagination model.UserPagination
 
-	decID, err := base64.StdEncoding.DecodeString(obj.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(obj.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	// あるサービス(楽天を想定)から作成されたユーザーを取得する関数
@@ -49,10 +39,7 @@ func (r *serviceResolver) Users(ctx context.Context, obj *model.Service) (*model
 		return nil, err
 	}
 	for _, user := range userPagination.Nodes {
-		userID := []byte("User:" + user.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encUserID := base64.StdEncoding.EncodeToString(userID)
-		user.ID = encUserID
+		user.ID = utils.Encode("User:", user.ID)
 	}
 	return &userPagination, nil
 }

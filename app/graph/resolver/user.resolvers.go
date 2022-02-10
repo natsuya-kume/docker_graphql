@@ -5,12 +5,11 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
-	"log"
 	"strings"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 func (r *userResolver) Service(ctx context.Context, obj *model.User) (*model.Service, error) {
@@ -18,10 +17,7 @@ func (r *userResolver) Service(ctx context.Context, obj *model.User) (*model.Ser
 	if err := r.DB.Where("id=?", obj.ServiceID).Find(&service).Error; err != nil { //一旦楽天だけをとってくる
 		return nil, err
 	}
-	serviceID := []byte("Service:" + service.ID) // プライマリキーを型名とセットで記述
-	// エンコードする
-	encServiceID := base64.StdEncoding.EncodeToString(serviceID)
-	service.ID = encServiceID
+	service.ID = utils.Encode("Service:", service.ID)
 	return &service, nil
 }
 
@@ -29,20 +25,14 @@ func (r *userResolver) PersonalTags(ctx context.Context, obj *model.User) (*mode
 	// あるユーザーが作成したパーソナルタグを取得する関数
 	var personalTagPagination model.PersonalTagPagination
 
-	decID, err := base64.StdEncoding.DecodeString(obj.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(obj.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 	if err := r.DB.Where("user_id=?", searchID).Find(&personalTagPagination.Nodes).Error; err != nil {
 		return nil, err
 	}
 	for _, personalTag := range personalTagPagination.Nodes {
-		personalTagID := []byte("PersonalTag:" + personalTag.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encPersonalTagID := base64.StdEncoding.EncodeToString(personalTagID)
-		personalTag.ID = encPersonalTagID
+		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
 	}
 
 	return &personalTagPagination, nil
@@ -52,10 +42,7 @@ func (r *userResolver) ReviewTags(ctx context.Context, obj *model.User) (*model.
 	// あるユーザーが作成したレビュータグを取得する関数
 	var reviewTagPagination model.ReviewTagPagination
 
-	decID, err := base64.StdEncoding.DecodeString(obj.ID)
-	if err != nil {
-		log.Fatal(err)
-	}
+	decID := utils.Decode(obj.ID)
 	// :以下の数字を取得
 	searchID := string(decID[strings.Index(string(decID), ":")+1:])
 
@@ -63,10 +50,8 @@ func (r *userResolver) ReviewTags(ctx context.Context, obj *model.User) (*model.
 		return nil, err
 	}
 	for _, reviewTag := range reviewTagPagination.Nodes {
-		reviewTagID := []byte("ReviewTag:" + reviewTag.ID) // プライマリキーを型名とセットで記述
-		// エンコードする
-		encReviewTagID := base64.StdEncoding.EncodeToString(reviewTagID)
-		reviewTag.ID = encReviewTagID
+		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
+
 	}
 	return &reviewTagPagination, nil
 }

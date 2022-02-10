@@ -5,10 +5,10 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 func (r *serviceAccountResolver) Service(ctx context.Context, obj *model.ServiceAccount) (*model.Service, error) {
@@ -17,10 +17,7 @@ func (r *serviceAccountResolver) Service(ctx context.Context, obj *model.Service
 	if err := r.DB.Where("id=?", obj.ServiceID).Find(&service).Error; err != nil { //一旦楽天だけをとってくる
 		return nil, err
 	}
-	serviceID := []byte("Service:" + service.ID) // プライマリキーを型名とセットで記述
-	// エンコードする
-	encServiceID := base64.StdEncoding.EncodeToString(serviceID)
-	service.ID = encServiceID
+	service.ID = utils.Encode("Service:", service.ID)
 	return &service, nil
 }
 

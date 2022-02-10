@@ -5,10 +5,10 @@ package graph
 
 import (
 	"context"
-	"encoding/base64"
 
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	"github.com/natsuya-kume/docker_graphql/app/graph/model"
+	"github.com/natsuya-kume/docker_graphql/app/utils"
 )
 
 func (r *reviewTagResolver) User(ctx context.Context, obj *model.ReviewTag) (*model.User, error) {
@@ -17,10 +17,7 @@ func (r *reviewTagResolver) User(ctx context.Context, obj *model.ReviewTag) (*mo
 	if err := r.DB.Where("id=?", obj.UserID).Find(&user).Error; err != nil { //一旦1人目のユーザーだけをとってくる
 		return nil, err
 	}
-	userID := []byte("User:" + user.ID) // プライマリキーを型名とセットで記述
-	// エンコードする
-	encUserID := base64.StdEncoding.EncodeToString(userID)
-	user.ID = encUserID
+	user.ID = utils.Encode("User:", user.ID)
 	return &user, nil
 }
 
