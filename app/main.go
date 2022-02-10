@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/go-sql-driver/mysql"
@@ -14,6 +16,7 @@ import (
 	"github.com/natsuya-kume/docker_graphql/app/config"
 	"github.com/natsuya-kume/docker_graphql/app/graph/generated"
 	graph "github.com/natsuya-kume/docker_graphql/app/graph/resolver"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 func main() {
@@ -36,6 +39,15 @@ func main() {
 
 	graphqlHandler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{DB: db}}))
 
+	graphqlHandler.SetErrorPresenter(func(ctx context.Context, e error) *gqlerror.Error {
+		err := graphql.DefaultErrorPresenter(ctx, e)
+		err.Message = e.Error()
+		err.Extensions = map[string]interface{}{
+			"key1": "value1",
+			"key2": "value2",
+		}
+		return err
+	})
 	playgroundHandler := playground.Handler("GraphQL", "/query")
 
 	e.POST("/query", func(c echo.Context) error {
