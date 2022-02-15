@@ -33,15 +33,25 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 	for _, admin := range admins {
 		admin.ID = utils.Encode("Admin:", admin.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(admins), limit)
+	hasNextpage := utils.HasNextPage(len(admins), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&admins).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&admins)
+
 	adminPagination := &model.AdminPagination{
 		Nodes: admins,
-		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+		PageInfo: &model.PaginationInfo{
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(admins),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return adminPagination, nil
