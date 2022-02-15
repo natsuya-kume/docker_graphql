@@ -168,15 +168,24 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 	for _, user := range users {
 		user.ID = utils.Encode("User:", user.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(users), limit)
+	hasNextpage := utils.HasNextPage(len(users), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&users).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&users)
 	userPagination := &model.UserPagination{
 		Nodes: users,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(users),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return userPagination, nil
