@@ -213,15 +213,24 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 	for _, personalTag := range personalTags {
 		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(personalTags), limit)
+	hasNextpage := utils.HasNextPage(len(personalTags), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&personalTags).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&personalTags)
 	personalTagPagination := &model.PersonalTagPagination{
 		Nodes: personalTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(personalTags),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return personalTagPagination, nil
@@ -248,15 +257,24 @@ func (r *queryResolver) ReviewTags(ctx context.Context, limit int, offset *int) 
 	for _, reviewTag := range reviewTags {
 		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(reviewTags), limit)
+	hasNextpage := utils.HasNextPage(len(reviewTags), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&reviewTags).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&reviewTags)
 	reviewTagPagination := &model.ReviewTagPagination{
 		Nodes: reviewTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(reviewTags),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return reviewTagPagination, nil
