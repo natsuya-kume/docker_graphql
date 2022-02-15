@@ -30,9 +30,6 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 	if err := r.DB.Find(&admins).Error; err != nil {
 		return nil, err
 	}
-	for _, admin := range admins {
-		admin.ID = utils.Encode("Admin:", admin.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(admins), limit)
 	hasNextpage := utils.HasNextPage(len(admins), limit, offset)
@@ -43,6 +40,9 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 
 	r.DB.Limit(limit).Offset(*offset).Find(&admins)
 
+	for _, admin := range admins {
+		admin.ID = utils.Encode("Admin:", admin.ID)
+	}
 	adminPagination := &model.AdminPagination{
 		Nodes: admins,
 		PageInfo: &model.PaginationInfo{
@@ -75,9 +75,6 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 	if err := r.DB.Find(&services).Error; err != nil {
 		return nil, err
 	}
-	for _, service := range services {
-		service.ID = utils.Encode("Service:", service.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(services), limit)
 	hasNextpage := utils.HasNextPage(len(services), limit, offset)
@@ -88,6 +85,9 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 
 	r.DB.Limit(limit).Offset(*offset).Find(&services)
 
+	for _, service := range services {
+		service.ID = utils.Encode("Service:", service.ID)
+	}
 	servicePagination := &model.ServicePagination{
 		Nodes: services,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
@@ -121,9 +121,6 @@ func (r *queryResolver) ServiceAccounts(ctx context.Context, limit int, offset *
 	if err := r.DB.Find(&serviceAccounts).Error; err != nil {
 		return nil, err
 	}
-	for _, serviceAccount := range serviceAccounts {
-		serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccount.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(serviceAccounts), limit)
 	hasNextpage := utils.HasNextPage(len(serviceAccounts), limit, offset)
@@ -133,6 +130,10 @@ func (r *queryResolver) ServiceAccounts(ctx context.Context, limit int, offset *
 	r.DB.Model(&serviceAccounts).Group("id").Count(&totalCount)
 
 	r.DB.Limit(limit).Offset(*offset).Find(&serviceAccounts)
+
+	for _, serviceAccount := range serviceAccounts {
+		serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccount.ID)
+	}
 	serviceAccountsPagination := &model.ServiceAccountPagination{
 		Nodes: serviceAccounts,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
@@ -165,9 +166,6 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 	if err := r.DB.Find(&users).Error; err != nil {
 		return nil, err
 	}
-	for _, user := range users {
-		user.ID = utils.Encode("User:", user.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(users), limit)
 	hasNextpage := utils.HasNextPage(len(users), limit, offset)
@@ -177,6 +175,10 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 	r.DB.Model(&users).Group("id").Count(&totalCount)
 
 	r.DB.Limit(limit).Offset(*offset).Find(&users)
+
+	for _, user := range users {
+		user.ID = utils.Encode("User:", user.ID)
+	}
 	userPagination := &model.UserPagination{
 		Nodes: users,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
@@ -210,9 +212,6 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 	if err := r.DB.Find(&personalTags).Error; err != nil {
 		return nil, err
 	}
-	for _, personalTag := range personalTags {
-		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(personalTags), limit)
 	hasNextpage := utils.HasNextPage(len(personalTags), limit, offset)
@@ -222,6 +221,10 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 	r.DB.Model(&personalTags).Group("id").Count(&totalCount)
 
 	r.DB.Limit(limit).Offset(*offset).Find(&personalTags)
+
+	for _, personalTag := range personalTags {
+		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
+	}
 	personalTagPagination := &model.PersonalTagPagination{
 		Nodes: personalTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
@@ -254,9 +257,6 @@ func (r *queryResolver) ReviewTags(ctx context.Context, limit int, offset *int) 
 	if err := r.DB.Find(&reviewTags).Error; err != nil {
 		return nil, err
 	}
-	for _, reviewTag := range reviewTags {
-		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
-	}
 	page := utils.Page(limit, offset)
 	paginationLength := utils.PaginationLength(len(reviewTags), limit)
 	hasNextpage := utils.HasNextPage(len(reviewTags), limit, offset)
@@ -266,6 +266,10 @@ func (r *queryResolver) ReviewTags(ctx context.Context, limit int, offset *int) 
 	r.DB.Model(&reviewTags).Group("id").Count(&totalCount)
 
 	r.DB.Limit(limit).Offset(*offset).Find(&reviewTags)
+
+	for _, reviewTag := range reviewTags {
+		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
+	}
 	reviewTagPagination := &model.ReviewTagPagination{
 		Nodes: reviewTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
