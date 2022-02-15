@@ -78,15 +78,25 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 	for _, service := range services {
 		service.ID = utils.Encode("Service:", service.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(services), limit)
+	hasNextpage := utils.HasNextPage(len(services), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&services).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&services)
+
 	servicePagination := &model.ServicePagination{
 		Nodes: services,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(services),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return servicePagination, nil
