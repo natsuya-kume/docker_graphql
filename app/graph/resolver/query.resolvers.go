@@ -33,15 +33,25 @@ func (r *queryResolver) Admins(ctx context.Context, limit int, offset *int) (*mo
 	for _, admin := range admins {
 		admin.ID = utils.Encode("Admin:", admin.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(admins), limit)
+	hasNextpage := utils.HasNextPage(len(admins), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&admins).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&admins)
+
 	adminPagination := &model.AdminPagination{
 		Nodes: admins,
-		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+		PageInfo: &model.PaginationInfo{
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(admins),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return adminPagination, nil
@@ -68,15 +78,25 @@ func (r *queryResolver) Services(ctx context.Context, limit int, offset *int) (*
 	for _, service := range services {
 		service.ID = utils.Encode("Service:", service.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(services), limit)
+	hasNextpage := utils.HasNextPage(len(services), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&services).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&services)
+
 	servicePagination := &model.ServicePagination{
 		Nodes: services,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(services),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return servicePagination, nil
@@ -104,15 +124,24 @@ func (r *queryResolver) ServiceAccounts(ctx context.Context, limit int, offset *
 	for _, serviceAccount := range serviceAccounts {
 		serviceAccount.ID = utils.Encode("ServiceAccount:", serviceAccount.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(serviceAccounts), limit)
+	hasNextpage := utils.HasNextPage(len(serviceAccounts), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&serviceAccounts).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&serviceAccounts)
 	serviceAccountsPagination := &model.ServiceAccountPagination{
 		Nodes: serviceAccounts,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(serviceAccounts),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return serviceAccountsPagination, nil
@@ -139,15 +168,24 @@ func (r *queryResolver) Users(ctx context.Context, limit int, offset *int, name 
 	for _, user := range users {
 		user.ID = utils.Encode("User:", user.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(users), limit)
+	hasNextpage := utils.HasNextPage(len(users), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&users).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&users)
 	userPagination := &model.UserPagination{
 		Nodes: users,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(users),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return userPagination, nil
@@ -175,15 +213,24 @@ func (r *queryResolver) PersonalTags(ctx context.Context, limit int, offset *int
 	for _, personalTag := range personalTags {
 		personalTag.ID = utils.Encode("PersonalTag:", personalTag.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(personalTags), limit)
+	hasNextpage := utils.HasNextPage(len(personalTags), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&personalTags).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&personalTags)
 	personalTagPagination := &model.PersonalTagPagination{
 		Nodes: personalTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(personalTags),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return personalTagPagination, nil
@@ -210,15 +257,24 @@ func (r *queryResolver) ReviewTags(ctx context.Context, limit int, offset *int) 
 	for _, reviewTag := range reviewTags {
 		reviewTag.ID = utils.Encode("ReviewTag:", reviewTag.ID)
 	}
+	page := utils.Page(limit, offset)
+	paginationLength := utils.PaginationLength(len(reviewTags), limit)
+	hasNextpage := utils.HasNextPage(len(reviewTags), limit, offset)
+	hasPreviouspage := utils.HasPreviousPage(offset)
+
+	var totalCount int64
+	r.DB.Model(&reviewTags).Group("id").Count(&totalCount)
+
+	r.DB.Limit(limit).Offset(*offset).Find(&reviewTags)
 	reviewTagPagination := &model.ReviewTagPagination{
 		Nodes: reviewTags,
 		PageInfo: &model.PaginationInfo{ //仮のデータ
-			Page:             1,
-			PaginationLength: 1,
-			HasNextPage:      false,
-			HasPreviousPage:  false,
+			Page:             page,
+			PaginationLength: paginationLength,
+			HasNextPage:      hasNextpage,
+			HasPreviousPage:  hasPreviouspage,
 			Count:            len(reviewTags),
-			TotalCount:       1,
+			TotalCount:       int(totalCount),
 		},
 	}
 	return reviewTagPagination, nil
