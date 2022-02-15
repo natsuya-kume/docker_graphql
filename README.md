@@ -14,3 +14,16 @@ M1mac 環境の人は，docker-compose.yml の db 部分に `platform: linux/amd
 ## GraphQL サーバ について
 
 レポジトリの root で `make start` して,[http://localhost:3000/playground](http://localhost:3000/playground)にアクセスしてください．
+
+## migration について
+
+```sh
+# create
+$ FILENAME=<filename> make migrate-create
+
+# up
+$ make migrate-up
+
+# down
+$ make migrate-down
+```
